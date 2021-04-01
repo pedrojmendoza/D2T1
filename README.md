@@ -6,6 +6,10 @@ The API accepts a command that will be "forwarded" to a device using MQTT PUBLIS
 
 Finally, IoT Core will process the response from the device using a rule associated to the response (uplink) topic and store the message on an S3 bucket.
 
+## Architecture
+
+![Image of Architecture](D2T1.png)
+
 ## Pre-conditions
 
 1) Install AWS CLI as detailed in https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html (the rest of the instructions here assume MacOS being used)
