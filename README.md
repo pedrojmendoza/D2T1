@@ -128,27 +128,25 @@ API_ENDPOINT=`aws cloudformation describe-stacks --stack-name D2T1 --query 'Stac
 curl -d '{"topic":"d2t1/cmds", "cmd":"send_files"}' -H "Content-Type: application/json" -X POST $API_ENDPOINT
 ```
 
-3) Check S3 bucket objects ...
-
-3.1) Obtain the S3 bucket name ...
+3) Obtain the S3 bucket name ...
 
 ```
 BUCKET=`aws cloudformation describe-stacks --stack-name D2T1-IoT --query 'Stacks[0].Outputs[0].OutputValue' --output text`
 ```
 
-3.2) List objects (based on the epoch of the message as received from the device by IoT Core) in S3 bucket
+4) List objects (based on the epoch of the message as received from the device by IoT Core) in S3 bucket
 
 ```
 aws s3api list-objects --bucket $BUCKET --query 'Contents[].Key'
 ```
 
-3.3) Get object from S3 bucket ...
+5) Get object from S3 bucket ...
 
 ```
 aws s3api get-object --bucket $BUCKET --key <YOUR_KEY> <YOUR_OUTPUT_FILENAME>.json
 ```
 
-3.4) Less your file ...
+6) Less your file ...
 
 ```
 less <YOUR_OUTPUT_FILENAME>.json
