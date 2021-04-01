@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: IoT Rule storing incoming messages on a CWL group
+
+Parameters:
+  UplinkTopic:
+    Type: String
+    Default: d2t1/uplink
+
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties: {}
+  TopicRule:
+    Type: AWS::IoT::TopicRule
+    Properties:
+      RuleName: D2T1
+      TopicRulePayload:
+        RuleDisabled: false
+        Sql: !Sub "SELECT * FROM '${UplinkTopic}'"
+        Actions:
+          - S3:
+              BucketName: !Ref Bucket
+              RoleArn: !GetAtt Role.Arn
+              Key: ${timestamp()}
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - iot.amazonaws.com
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: s3:*
+                Resource: !Sub "arn:aws:s3:::${Bucket}/*"
+
+Outputs:
+  Bucket:
+    Value: !Ref Bucket                
