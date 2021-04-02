@@ -12,8 +12,10 @@ def customCallback(client, userdata, message):
     print("from topic: ")
     print(message.topic)
     print("--------------\n\n")
-    if message.payload.decode() == 'send_files':
+    request = json.loads(message.payload)
+    if request['cmd'] == 'send_files':
         response = {}
+        response['id'] = request['id']
         response['files'] = os.listdir()
         responseJson = json.dumps(response)
         myAWSIoTMQTTClient.publish(uplink_topic, responseJson, 0)

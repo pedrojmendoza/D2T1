@@ -2,9 +2,9 @@
 
 This is a simple demo ilustrating how to connect a REST API with a device via AWS IoT Core. 
 
-The API accepts a command that will be "forwarded" to a device using MQTT PUBLISH and the device will process the cmd and send the response back to IoT Core on a different topic.
+The API accepts a command that will be "forwarded" to a device using MQTT PUBLISH and the device will process the cmd and send the response back to IoT Core on a different topic. It will also return back to client a UUID to identify the request and track the results of its processing.
 
-Finally, IoT Core will process the response from the device using a rule associated to the response (uplink) topic and store the message on an S3 bucket.
+Finally, IoT Core will process the response from the device using a rule associated to the response (uplink) topic and store the message on an S3 bucket (using as object name the original UUID).
 
 ## Architecture
 
@@ -132,13 +132,15 @@ API_ENDPOINT=`aws cloudformation describe-stacks --stack-name D2T1 --query 'Stac
 curl -d '{"topic":"d2t1/cmds", "cmd":"send_files"}' -H "Content-Type: application/json" -X POST $API_ENDPOINT
 ```
 
+When successful, it will return back to client the UUID of the command. It can be used for querying/tracking the results.
+
 3) Obtain the S3 bucket name ...
 
 ```
 BUCKET=`aws cloudformation describe-stacks --stack-name D2T1-IoT --query 'Stacks[0].Outputs[0].OutputValue' --output text`
 ```
 
-4) List objects (based on the epoch of the message as received from the device by IoT Core) in S3 bucket
+4) List objects (each object will be named based on the UUID of the corresponding command) in S3 bucket
 
 ```
 aws s3api list-objects --bucket $BUCKET --query 'Contents[].Key'
@@ -158,7 +160,7 @@ less <YOUR_OUTPUT_FILENAME>.json
 
 ## Potential improvements
 
-1) Use Shadow service for sending commands as detailed in https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html
+1) Use Jobs service for sending commands as detailed in https://docs.aws.amazon.com/iot/latest/developerguide/iot-jobs.html
 
 2) Include a CI/CD deployment pipeline for the cloud-side infra
 

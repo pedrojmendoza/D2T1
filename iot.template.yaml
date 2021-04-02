@@ -21,7 +21,7 @@ Resources:
           - S3:
               BucketName: !Ref Bucket
               RoleArn: !GetAtt Role.Arn
-              Key: ${timestamp()}
+              Key: ${id}
   Role:
     Type: AWS::IAM::Role
     Properties:
