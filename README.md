@@ -157,6 +157,19 @@ aws s3api get-object --bucket $BUCKET --key <YOUR_KEY> <YOUR_OUTPUT_FILENAME>.js
 ```
 less <YOUR_OUTPUT_FILENAME>.json
 ```
+## Clean up
+
+1) Delete the stack with the artifacts required for the REST API ...
+
+```
+aws cloudformation delete-stack --stack-name D2T1
+```
+
+2) Delete the stack with the artifacts required for the IoT Core rule (please note it will NOT delete the destination S3 bucket) ...
+
+```
+aws cloudformation delete-stack --stack-name D2T1-IoT
+```
 
 ## Potential improvements
 

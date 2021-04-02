@@ -9,7 +9,7 @@ Parameters:
 Resources:
   Bucket:
     Type: AWS::S3::Bucket
-    Properties: {}
+    DeletionPolicy: Retain
   TopicRule:
     Type: AWS::IoT::TopicRule
     Properties:
