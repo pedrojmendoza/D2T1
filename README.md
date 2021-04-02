@@ -177,4 +177,6 @@ aws cloudformation delete-stack --stack-name D2T1-IoT
 
 2) Include a CI/CD deployment pipeline for the cloud-side infra
 
-3) Add unit testing for the lambda's code
+3) Harden (and add unit testing) the lambda's code
+
+4) Improve topics naming conventions based on https://docs.aws.amazon.com/whitepapers/latest/designing-mqtt-topics-aws-iot-core/designing-mqtt-topics-aws-iot-core.pdf
